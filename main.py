@@ -1,31 +1,22 @@
 from fastapi import FastAPI
+
+from routes.servicios import router as servicios_router
+from routes.auth import router as auth_router
+from routes.mascotas import router as mascotas_router
+from routes.reportes import router as reportes_router
+
 app = FastAPI()
+
 @app.get("/")
 def saludar():
     return {"message": "Hola! Bienvenido a mi API con FastAPI!"}
+
 @app.get("/bienvenido/{nombre}")
 def saludar_persona(nombre: str):
     return {"message": f"Hola {nombre}! que bueno verte por aquí!"}
 
-servicios_db = [
-    {"nombre": "consulta", "precio": 50},
-    {"nombre": "baño", "precio": 60.0},
-    {"nombre": "corte", "precio": 100.0}
-]
-@app.get("/servicios")
-def listar_servicios():
-    return {
-        "servicios": servicios_db
-    }
+app.include_router(servicios_router)
+app.include_router(auth_router)
+app.include_router(mascotas_router)
+app.include_router(reportes_router)
 
-def servicios():
-    return print(servicios_db)
-
-servicios()
-
-@app.post("/agregar-servicio")
-def agregar_servicio(nuevo: dict):
-    servicios_db.append(nuevo)
-    return {
-        "message": "Servicio guardado"
-     }
