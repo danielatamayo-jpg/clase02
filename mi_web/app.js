@@ -72,7 +72,7 @@ function disableProtectedTabs() {
 }
 
 function switchTab(tabName) {
-  const tab = tabName.toLowerCase();
+  let tab = tabName.toLowerCase();
   const protectedTabs = ["servicios", "mascotas", "reporte"];
   if (protectedTabs.includes(tab) && !state.user) {
     tab = "acceso";
@@ -125,7 +125,7 @@ async function fetchJson(path, options = {}) {
 
 async function loadServicios() {
   try {
-    const data = await fetchJson("/servicios");
+    const data = await fetchJson("/servicios/");
     state.servicios = data.servicios || [];
     renderServicios();
     renderServiciosSelect();
@@ -171,7 +171,7 @@ function renderServiciosSelect() {
 async function fetchMascotas(correo) {
   try {
     const data = await fetchJson(`/mascotas/${encodeURIComponent(correo)}`);
-    renderMascotas(data.mascotas || []);
+    renderMascotas(data.registros || []);
   } catch (err) {
     showAlert(dom.resultadosMascotas, "error", `Error buscando mascotas: ${err.message}`);
   }
@@ -208,7 +208,7 @@ async function fetchReporte(correo) {
 
 function renderReporte(data) {
   dom.reporteResultados.innerHTML = "";
-  if (!data || !data.correo) {
+  if (!data || !data.correo_dueno) {
     dom.reporteResultados.innerHTML = "<p>No hay reporte disponible.</p>";
     return;
   }
@@ -227,7 +227,7 @@ function renderReporte(data) {
 
   stats.appendChild(makeStat("Cantidad de servicios", data.cantidad_servicios));
   stats.appendChild(makeStat("Total gastado", `$${Number(data.total_gastado).toFixed(2)}`));
-  stats.appendChild(makeStat("Correo", data.correo));
+  stats.appendChild(makeStat("Correo", data.correo_dueno));
 
   dom.reporteResultados.appendChild(stats);
 
@@ -290,11 +290,11 @@ async function init() {
       return;
     }
     try {
-      const data = await fetchJson("/register", {
+      const data = await fetchJson("/auth/register", {
         method: "POST",
-        body: JSON.stringify({ correo: email, contrasena: password }),
+        body: JSON.stringify({ email: email, password: password }),
       });
-      showAlert(dom.formRegistro, "success", data.mensaje || "Registro exitoso.");
+      showAlert(dom.formRegistro, "success", data.message || "Registro exitoso.");
     } catch (err) {
       showAlert(dom.formRegistro, "error", err.message);
     }
@@ -309,12 +309,12 @@ async function init() {
       return;
     }
     try {
-      const data = await fetchJson("/login", {
+      const data = await fetchJson("/auth/login", {
         method: "POST",
-        body: JSON.stringify({ correo: email, contrasena: password }),
+        body: JSON.stringify({ email: email, password: password }),
       });
       setAuthState(email);
-      showAlert(dom.formLogin, "success", data.mensaje || "Login exitoso.");
+      showAlert(dom.formLogin, "success", data.message || "Login exitoso.");
     } catch (err) {
       showAlert(dom.formLogin, "error", err.message);
     }
@@ -329,11 +329,11 @@ async function init() {
       return;
     }
     try {
-      const data = await fetchJson("/agregar-servicio", {
+      const data = await fetchJson("/servicios/agregar", {
         method: "POST",
         body: JSON.stringify({ nombre, precio: Number(precio) }),
       });
-      showAlert(dom.formAgregarServicio, "success", data.mensaje || "Servicio agregado.");
+      showAlert(dom.formAgregarServicio, "success", data.message || "Servicio agregado.");
       loadServicios();
       dom.formAgregarServicio.reset();
     } catch (err) {
@@ -352,11 +352,11 @@ async function init() {
       return;
     }
     try {
-      const data = await fetchJson("/registrar-mascota", {
+      const data = await fetchJson("/mascotas/registrar-mascota", {
         method: "POST",
-        body: JSON.stringify({ correo, nombre, tipo_servicio: tipoServicio, fecha }),
+        body: JSON.stringify({ correo_dueno: correo, nombre_mascota: nombre, tipo_servicio: tipoServicio, fecha }),
       });
-      showAlert(dom.formRegistrarMascota, "success", data.mensaje || "Mascota registrada.");
+      showAlert(dom.formRegistrarMascota, "success", data.message || "Mascota registrada.");
       dom.formRegistrarMascota.reset();
     } catch (err) {
       showAlert(dom.formRegistrarMascota, "error", err.message);
