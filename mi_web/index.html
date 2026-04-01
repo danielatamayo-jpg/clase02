@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PetCare - Gestión de Mascotas</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar" aria-label="Navegación principal">
+        <div class="sidebar__logo" id="logo">
+          <h1>PetCare</h1>
+        </div>
+        <nav class="sidebar__nav" aria-label="Menú de secciones">
+          <ul>
+            <li><a href="#inicio" data-tab="inicio" class="active">Inicio</a></li>
+            <li><a href="#acceso" data-tab="acceso">Acceso</a></li>
+            <li><a href="#servicios" data-tab="servicios">Servicios</a></li>
+            <li><a href="#mascotas" data-tab="mascotas">Mascotas</a></li>
+            <li><a href="#reporte" data-tab="reporte">Reporte</a></li>
+          </ul>
+        </nav>
+        <footer class="sidebar__footer">
+          <span class="user-badge" id="user-badge">Usuario: invitado</span>
+          <button type="button" id="btn-logout">Salir</button>
+        </footer>
+      </aside>
+
+      <main class="main-content">
+        <section id="inicio" class="active" aria-labelledby="inicio-title">
+          <h2 id="inicio-title">Bienvenido a PetCare</h2>
+          <p>Administra tus servicios y mascotas fácilmente desde un solo lugar.</p>
+
+          <form id="form-saludo" class="form" autocomplete="off">
+            <label for="input-nombre-saludo">Tu nombre</label>
+            <input type="text" id="input-nombre-saludo" name="nombreSaludo" placeholder="Escribe tu nombre" required />
+            <button type="submit" id="btn-saludar">Saludar</button>
+          </form>
+        </section>
+
+        <section id="acceso" class="section" aria-labelledby="acceso-title">
+          <h2 id="acceso-title">Acceso</h2>
+
+          <article class="card">
+            <h3>Registro</h3>
+            <form id="form-registro" class="form" autocomplete="off">
+              <label for="input-registro-email">Correo</label>
+              <input type="email" id="input-registro-email" name="registroEmail" required />
+
+              <label for="input-registro-password">Contraseña</label>
+              <input type="password" id="input-registro-password" name="registroPassword" required />
+
+              <button type="submit" id="btn-registrarse">Crear cuenta</button>
+            </form>
+          </article>
+
+          <article class="card">
+            <h3>Login</h3>
+            <form id="form-login" class="form" autocomplete="off">
+              <label for="input-login-email">Correo</label>
+              <input type="email" id="input-login-email" name="loginEmail" required />
+
+              <label for="input-login-password">Contraseña</label>
+              <input type="password" id="input-login-password" name="loginPassword" required />
+
+              <button type="submit" id="btn-login">Ingresar</button>
+            </form>
+          </article>
+        </section>
+
+        <section id="servicios" class="section" aria-labelledby="servicios-title">
+          <h2 id="servicios-title">Servicios</h2>
+
+          <form id="form-agregar-servicio" class="form" autocomplete="off">
+            <label for="input-servicio-nombre">Nombre del servicio</label>
+            <input type="text" id="input-servicio-nombre" name="servicioNombre" required />
+
+            <label for="input-servicio-precio">Precio</label>
+            <input type="number" id="input-servicio-precio" name="servicioPrecio" min="0" step="0.01" required />
+
+            <button type="submit" id="btn-agregar-servicio">Agregar servicio</button>
+          </form>
+
+          <div id="lista-servicios" class="listado" aria-live="polite"></div>
+        </section>
+
+        <section id="mascotas" class="section" aria-labelledby="mascotas-title">
+          <h2 id="mascotas-title">Mascotas</h2>
+
+          <form id="form-registrar-mascota" class="form" autocomplete="off">
+            <label for="input-mascota-email">Correo del dueño</label>
+            <input type="email" id="input-mascota-email" name="mascotaEmail" required />
+
+            <label for="input-mascota-nombre">Nombre de la mascota</label>
+            <input type="text" id="input-mascota-nombre" name="mascotaNombre" required />
+
+            <label for="select-mascota-servicio">Servicio</label>
+            <select id="select-mascota-servicio" name="mascotaServicio" required>
+              <option value="">Selecciona un servicio</option>
+            </select>
+
+            <label for="input-mascota-fecha">Fecha</label>
+            <input type="date" id="input-mascota-fecha" name="mascotaFecha" required />
+
+            <button type="submit" id="btn-registrar-mascota">Registrar mascota</button>
+          </form>
+
+          <form id="form-buscar-mascota" class="form" autocomplete="off">
+            <label for="input-buscar-mascota">Buscar mascota</label>
+            <input type="text" id="input-buscar-mascota" name="buscarMascota" placeholder="Nombre o dueño" />
+            <button type="submit" id="btn-buscar-mascota">Buscar</button>
+          </form>
+
+          <div id="resultados-mascotas" class="listado" aria-live="polite"></div>
+        </section>
+
+        <section id="reporte" class="section" aria-labelledby="reporte-title">
+          <h2 id="reporte-title">Reporte</h2>
+
+          <form id="form-reporte" class="form" autocomplete="off">
+            <label for="input-reporte-email">Buscar por correo</label>
+            <input type="email" id="input-reporte-email" name="reporteEmail" required />
+            <button type="submit" id="btn-buscar-reporte">Buscar</button>
+          </form>
+
+          <div id="reporte-resultados" class="listado" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
